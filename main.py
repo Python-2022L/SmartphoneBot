@@ -4,7 +4,7 @@ import os
 from db import DB
 TOKEN=os.environ.get("TOKEN")
 
-db = DB('db.json')
+db = DB()
 
 def start(update: Update, context: CallbackContext) -> None:
     bot = context.bot
@@ -60,9 +60,10 @@ def get_product(update: Update, context: CallbackContext) -> None:
     for i, phone in enumerate(products[:pr_range], 1):
         phone_text += f"{i}. {phone['name']} {phone['memory']}\n"
         # create button
+        print(phone)
         btn = InlineKeyboardButton(
             text = str(i),
-            callback_data=f"product_{brend}_{phone.doc_id}"
+            callback_data=f"product_{brend}_{phone['doc_id']}"
         )
         if i < 6:
             # 1 2 3 4 5

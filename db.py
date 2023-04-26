@@ -1,14 +1,16 @@
 from tinydb import TinyDB, Query
+import requests
 
 class DB:
-    def __init__(self,path):
-        self.db = TinyDB(path)
+    def __init__(self):
+        self.base_url = "http://127.0.0.1:5000"
 
     def get_tables(self):
         """
         To get the list of all the tables in the database
         """
-        return list(self.db.tables())
+        response = requests.get(self.base_url + "/smartphone")
+        return response.json()['brands']
         
     def getPhone(self,brand,idx):
         """
@@ -18,18 +20,13 @@ class DB:
         return:
             dict
         """
-        table = self.db.table(brand)
-        return table.get(doc_id=idx)
+        response = requests.get(self.base_url + "/smartphone/" + brand + "/" + str(idx))
+        return response.json()
 
     def get_phone_list(self,brand):
         """
         Return phone list
         """
-        table = self.db.table(brand)
-        return table.all()
-
-        
-
-# db = DB('db.json')
-# tables = db.get_tables()
-# print(db.get_phone_list(tables[0]))
+        response = requests.get(self.base_url + "/smartphone/" + brand)
+        print(response.json())
+        return response.json()['phones']
